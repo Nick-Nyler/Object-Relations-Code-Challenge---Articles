@@ -17,7 +17,7 @@ class Magazine:
         if not isinstance(value, str) or not value.strip():
             raise ValueError("Name must be a non-empty string")
         self._name = value
-        if not self.id:  # Save only if new magazine
+        if not self.id:  
             self._save()
 
     @property

@@ -31,17 +31,17 @@ A Python application modeling Authors, Articles, and Magazines with a SQLite dat
       ```
 
 ## Features
-Author, Article, and Magazine classes with SQL-based CRUD operations
-Relationship methods for articles, magazines, and authors
-Transaction handling and error management
-Comprehensive test suite
-CLI tool for interactive querying
-Optimized SQL queries with indexes
+* Author, Article, and Magazine classes with SQL-based CRUD operations
+* Relationship methods for articles, magazines, and authors
+* Transaction handling and error management
+* Comprehensive test suite
+* CLI tool for interactive querying
+* Optimized SQL queries with indexes
 
 ## Database Schema
-authors: id, name
-magazines: id, name, category
-articles: id, title, author_id, magazine_id    
+* authors: id, name
+* magazines: id, name, category
+* articles: id, title, author_id, magazine_id    
 
 
 #### 13. Git Commit Sequence

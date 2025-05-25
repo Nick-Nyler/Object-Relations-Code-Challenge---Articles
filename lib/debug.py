@@ -1,12 +1,16 @@
-from models.author import Author
-from models.magazine import Magazine
-from models.article import Article
-from db.seed import seed_database
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from lib.models.author import Author
+from lib.models.magazine import Magazine
+from lib.models.article import Article
+from lib.db.seed import seed_database
 
 def main():
     from scripts.setup_db import setup_database
     setup_database()
-
+    
     author = Author.find_by_name("John Doe")
     print(f"Author: {author.name}")
     print(f"Articles: {author.articles()}")

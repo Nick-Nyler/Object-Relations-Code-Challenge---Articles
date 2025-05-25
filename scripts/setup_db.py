@@ -1,3 +1,9 @@
+import os
+import sys
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, project_root)
+
 import sqlite3
 from lib.db.connection import get_connection
 from lib.db.seed import seed_database

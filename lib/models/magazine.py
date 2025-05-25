@@ -5,8 +5,10 @@ class Magazine:
         self.id = id
         self._name = None
         self._category = None
-        self.name = name  
-        self.category = category  
+        self.name = name 
+        self.category = category 
+        if not self.id and self._name and self._category: 
+            self._save()
 
     @property
     def name(self):
@@ -17,8 +19,6 @@ class Magazine:
         if not isinstance(value, str) or not value.strip():
             raise ValueError("Name must be a non-empty string")
         self._name = value
-        if not self.id:  
-            self._save()
 
     @property
     def category(self):
@@ -29,7 +29,7 @@ class Magazine:
         if not isinstance(value, str) or not value.strip():
             raise ValueError("Category must be a non-empty string")
         self._category = value
-        if not self.id: 
+        if not self.id and self._name:  # Save only if name is also set
             self._save()
 
     def _save(self):
@@ -38,7 +38,7 @@ class Magazine:
             conn.execute("BEGIN TRANSACTION")
             cursor = conn.cursor()
             cursor.execute("INSERT INTO magazines (name, category) VALUES (?, ?) RETURNING id",
-                          (self.name, self.category))
+                          (self._name, self._category))
             self.id = cursor.fetchone()[0]
             conn.commit()
         except Exception as e:

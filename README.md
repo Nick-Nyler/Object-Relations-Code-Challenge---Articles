@@ -1,8 +1,36 @@
 # Articles Code Challenge
 
-A Python application modeling Authors, Articles, and Magazines with a SQLite database using raw SQL queries.
+A Python application modeling Authors, Articles, and Magazines with a SQLite database using raw SQL queries. This project implements object-oriented programming principles, raw SQL operations, and proper database relationships without using SQLAlchemy.
 
-## Setup
+## Project Overview
+
+This project models a many-to-many relationship between `Authors`, `Articles`, and `Magazines`:
+- An `Author` can write many `Articles`.
+- A `Magazine` can publish many `Articles`.
+- An `Article` belongs to both an `Author` and a `Magazine`.
+- The `Author`-`Magazine` relationship is many-to-many through the `Articles` table.
+
+The application uses SQLite for data persistence, includes a comprehensive test suite, and provides a CLI tool for interactive querying.
+
+## Features
+* Author, Article, and Magazine classes with SQL-based CRUD operations
+* Relationship methods for articles, magazines, and authors
+* Transaction handling and error management
+* Comprehensive test suite
+* CLI tool for interactive querying
+* Optimized SQL queries with indexes
+
+## Database Schema
+* authors: id, name
+* magazines: id, name, category
+* articles: id, title, author_id, magazine_id    
+
+## Setup Instructions
+
+### Prerequisites
+- Python 3.8+
+- `pip` for installing dependencies
+- Git for version control
 
 1. **Create virtual environment**:
    ```bash
@@ -23,56 +51,9 @@ A Python application modeling Authors, Articles, and Magazines with a SQLite dat
      ```
 5. **Debug interactively**:
    ```bash
-     python lib/debug.py
+     python -m lib.debug
      ```
 6. **Run CLI tool**:
     ```bash
       python scripts/run_queries.py
       ```
-
-## Features
-* Author, Article, and Magazine classes with SQL-based CRUD operations
-* Relationship methods for articles, magazines, and authors
-* Transaction handling and error management
-* Comprehensive test suite
-* CLI tool for interactive querying
-* Optimized SQL queries with indexes
-
-## Database Schema
-* authors: id, name
-* magazines: id, name, category
-* articles: id, title, author_id, magazine_id    
-
-
-#### 13. Git Commit Sequence
-
-Follow the recommended commit sequence:
-
-```bash
-git init
-git add README.md .gitignore
-git commit -m "Initialize project structure and documentation"
-
-git add lib/db/connection.py lib/db/schema.sql
-git commit -m "Add database connection and schema"
-
-git add lib/models/author.py
-git commit -m "Implement Author class with SQL methods"
-
-git add lib/models/magazine.py
-git commit -m "Implement Magazine class with SQL methods"
-
-git add lib/models/article.py
-git commit -m "Implement Article class with SQL methods"
-
-git add lib/db/seed.py scripts/setup_db.py
-git commit -m "Add seed data and database setup script"
-
-git add tests/
-git commit -m "Add test suite for all models"
-
-git add lib/debug.py scripts/run_queries.py
-git commit -m "Add debug script and CLI tool"
-
-git add .
-git commit -m "Final documentation and cleanup"

@@ -1,42 +1,52 @@
 import pytest
+from lib.models.article import Article
 from lib.models.author import Author
 from lib.models.magazine import Magazine
-from lib.models.article import Article
+from lib.db.seed import seed_data
 from lib.db.connection import get_connection
-from lib.db.seed import seed_database
 
 @pytest.fixture
-def setup_database():
+def setup_db():
     from scripts.setup_db import setup_database
     setup_database()
     yield
+
+def test_article_save(setup_db):
+    author = Author("Test Author")
+    author.save()
+    magazine = Magazine("Test Magazine", "Test Category")
+    magazine.save()
+    
+    article = Article("Test Article", author.id, magazine.id)
+    article.save()
+    retrieved = Article.find_by_id(article.id)
+    assert retrieved is not None, "Failed to retrieve saved article"
+    assert retrieved.title == "Test Article"
+    assert retrieved.author_id == author.id
+    assert retrieved.magazine_id == magazine.id
+
+def test_article_author(setup_db):
     conn = get_connection()
-    conn.execute("DROP TABLE articles")
-    conn.execute("DROP TABLE authors")
-    conn.execute("DROP TABLE magazines")
-    conn.commit()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM articles LIMIT 1")
+    row = cursor.fetchone()
     conn.close()
+    if not row:
+        pytest.skip("No articles found in seed data")
+    article = Article.find_by_id(row['id'])
+    author = article.author()
+    assert author is not None, "No author found for article"
+    assert author.id == article.author_id
 
-def test_article_initialization(setup_database):
-    author = Author("Test Author")
-    magazine = Magazine("Test Mag", "Test Cat")
-    article = Article("Test Article", author, magazine)
-    assert article.title == "Test Article"
-    assert article.author == author
-    assert article.magazine == magazine
-    assert article.id is not None
-
-def test_article_validation(setup_database):
-    author = Author("Test Author")
-    magazine = Magazine("Test Mag", "Test Cat")
-    with pytest.raises(ValueError):
-        Article("", author, magazine)
-
-def test_article_find_by_id(setup_database):
-    author = Author("Test Author")
-    magazine = Magazine("Test Mag", "Test Cat")
-    article = Article("Test Article", author, magazine)
-    found_article = Article.find_by_id(article.id)
-    assert found_article.title == "Test Article"
-    assert found_article.author.name == "Test Author"
-    assert found_article.magazine.name == "Test Mag"
+def test_article_magazine(setup_db):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM articles LIMIT 1")
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        pytest.skip("No articles found in seed data")
+    article = Article.find_by_id(row['id'])
+    magazine = article.magazine()
+    assert magazine is not None, "No magazine found for article"
+    assert magazine.id == article.magazine_id

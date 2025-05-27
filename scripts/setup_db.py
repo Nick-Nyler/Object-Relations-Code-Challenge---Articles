@@ -1,24 +1,19 @@
+import sqlite3
 import os
 import sys
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, project_root)
-
-import sqlite3
-from lib.db.connection import get_connection
-from lib.db.seed import seed_database
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 def setup_database():
-    conn = get_connection()
-    cursor = conn.cursor()
-    
+    print("Creating database and tables...")
+    conn = sqlite3.connect('articles.db')
     with open('lib/db/schema.sql', 'r') as f:
-        schema = f.read()
-    cursor.executescript(schema)
+        conn.executescript(f.read())
     conn.commit()
     conn.close()
-    
-    seed_database()
+    print("Database schema created.")
+    from lib.db.seed import seed_data
+    seed_data()
 
 if __name__ == "__main__":
     setup_database()

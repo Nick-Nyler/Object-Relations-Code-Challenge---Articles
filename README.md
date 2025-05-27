@@ -51,7 +51,7 @@ The application uses SQLite for data persistence, includes a comprehensive test 
      ```
 5. **Debug interactively**:
    ```bash
-     python -m lib.debug
+     python lib/debug.py
      ```
 6. **Run CLI tool**:
     ```bash
